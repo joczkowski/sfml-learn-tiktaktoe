@@ -82,6 +82,27 @@ int main() {
   sf::Texture cross;
   cross.loadFromFile("assets/cross.png", sf::IntRect(0, 0, verticalStep, horizontalStep));
 
+  sf::Texture strikev;
+  strikev.loadFromFile("assets/strikev.png", sf::IntRect(0, 0, width, horizontalStep));
+  sf::Sprite strikevSprite;
+  strikevSprite.setTexture(strikev);
+
+  sf::Texture strikeh;
+  strikeh.loadFromFile("assets/strikeh.png", sf::IntRect(0, 0, verticalStep, height));
+  sf::Sprite strikehSprite;
+  strikehSprite.setTexture(strikeh);
+
+  sf::Texture strikec;
+  strikec.loadFromFile("assets/strikec.png", sf::IntRect(0, 0, width, height));
+  sf::Sprite strikecSprite;
+  strikecSprite.setTexture(strikec);
+
+
+  sf::Texture rstrikec;
+  rstrikec.loadFromFile("assets/reversestrikec.png", sf::IntRect(0, 0, width, height));
+  sf::Sprite reversStrikecSprite;
+  reversStrikecSprite.setTexture(rstrikec);
+
   Field board[3][3];
 
   for (int i = 0; i < 3; i++) {
@@ -93,6 +114,8 @@ int main() {
 
   int currentPlayer = 1;
   int moveCount = 0;
+
+  sf::Sprite strike;
 
   while (window.isOpen())
   {
@@ -122,11 +145,16 @@ int main() {
         }
 
 
+        //check coll
         for(int i = 0; i < 3; i++){
             if(board[x][i].selected != currentPlayer)
                 break;
             if(i == 3-1){
               std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+
+              strike = strikehSprite;
+              sf::Vector2f position(x * horizontalStep, 0);
+              strike.setPosition(position);
             }
         }
         
@@ -136,6 +164,10 @@ int main() {
                 break;
             if(i == 3-1){
               std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+
+              strike = strikevSprite;
+              sf::Vector2f position(0, y * horizontalStep);
+              strike.setPosition(position);
             }
         }
         
@@ -147,6 +179,7 @@ int main() {
                     break;
                 if(i == 3-1){
                   std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+                  strike = reversStrikecSprite;
                 }
             }
         }
@@ -158,6 +191,7 @@ int main() {
                     break;
                 if(i == 3-1){
                   std::cout << "Player " << currentPlayer << " wins!" << std::endl;
+                  strike = strikecSprite;
                 }
             }
         }
@@ -178,6 +212,8 @@ int main() {
 
       window.draw(firstHorizontalLine, 2, sf::Lines);
       window.draw(secondHorizontalLine, 2, sf::Lines);
+
+      window.draw(strike);
 
       window.display();
     }
